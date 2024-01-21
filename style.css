@@ -1,0 +1,40 @@
+html {
+  font-size: 16px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.game__buttons-wrapper {
+  border: 1px solid black;
+  width: 400px;
+  height: 400px;
+
+  padding: 0;
+  margin: 0;
+
+  position: relative;
+}
+
+.button {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin: 0;
+  padding: 0;
+  font-size: clamp(1rem, 20vw, 2.2rem);
+  /* transition: all 0.2s ease-in-out; */
+}
+
+.button.empty {
+  visibility: hidden;
+}
+
+
+@media screen and (hover: hover) {
+  .button:hover {
+    cursor: pointer;
+  }
+}
