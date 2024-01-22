@@ -12,7 +12,7 @@ setButtonsPlaces();
 getEmptyButtonCoordinates();
 
 gameButtonsWrapper.addEventListener('click', clickOnButton);
-
+document.addEventListener('keyup', pressArrow);
 
 
 function setButtonsOrder() {
@@ -26,6 +26,7 @@ function outputButtons() {
     const button = document.createElement('button');
     button.classList.add('button');
     button.textContent = el;
+    button.setAttribute('tabindex', '-1');
     gameButtonsWrapper.append(button);
 
     if (el === 0) button.classList.add('empty');
@@ -61,8 +62,6 @@ function getEmptyButtonCoordinates() {
   emptyCoordinates[1] = +emptyButton.getAttribute('data-y');
 }
 
-
-
 // ************************
 // ************************
 function clickOnButton(e) {
@@ -78,6 +77,66 @@ function clickOnButton(e) {
   const emptyBtn = document.querySelector('.empty');
   const clickedBtn = e.target;
 
+  replaceButtons(emptyBtn, clickedBtn)
+}
+
+function pressArrow(e) {
+  if (e.key !== 'ArrowUp' &&
+    e.key !== 'ArrowRight' &&
+    e.key !== 'ArrowDown' &&
+    e.key !== 'ArrowLeft') return;
+
+  if (e.key === 'ArrowUp') {
+    const buttonToMove =
+      document.querySelector(
+        `[data-x="${emptyCoordinates[0]}"][data-y="${+emptyCoordinates[1] + 1}"]`);
+
+    if (buttonToMove) {
+      const emptyBtn = document.querySelector('.empty');
+      const clickedBtn = buttonToMove;
+      replaceButtons(emptyBtn, clickedBtn);
+    }
+  }
+
+  if (e.key === 'ArrowRight') {
+    const buttonToMove =
+      document.querySelector(
+        `[data-x="${emptyCoordinates[0] - 1}"][data-y="${+emptyCoordinates[1]}"]`);
+
+    if (buttonToMove) {
+      const emptyBtn = document.querySelector('.empty');
+      const clickedBtn = buttonToMove;
+      replaceButtons(emptyBtn, clickedBtn);
+    }
+  }
+
+  if (e.key === 'ArrowDown') {
+    const buttonToMove =
+      document.querySelector(
+        `[data-x="${emptyCoordinates[0]}"][data-y="${+emptyCoordinates[1] - 1}"]`);
+
+    if (buttonToMove) {
+      const emptyBtn = document.querySelector('.empty');
+      const clickedBtn = buttonToMove;
+      replaceButtons(emptyBtn, clickedBtn);
+    }
+  }
+
+  if (e.key === 'ArrowLeft') {
+    const buttonToMove =
+      document.querySelector(
+        `[data-x="${emptyCoordinates[0] + 1}"][data-y="${+emptyCoordinates[1]}"]`);
+
+    if (buttonToMove) {
+      const emptyBtn = document.querySelector('.empty');
+      const clickedBtn = buttonToMove;
+      replaceButtons(emptyBtn, clickedBtn);
+    }
+  }
+}
+
+// helper
+function replaceButtons(emptyBtn, clickedBtn) {
   emptyBtn.setAttribute('data-x', clickedBtn.getAttribute('data-x'));
   emptyBtn.setAttribute('data-y', clickedBtn.getAttribute('data-y'));
 
@@ -92,13 +151,4 @@ function clickOnButton(e) {
 
   emptyCoordinates[0] = +emptyBtn.getAttribute('data-x');
   emptyCoordinates[1] = +emptyBtn.getAttribute('data-y');
-
-  const arr = Array.from(document.querySelectorAll('.button'));
 }
-
-
-
-
-
-
-
