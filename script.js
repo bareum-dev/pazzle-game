@@ -29,6 +29,10 @@ function outputButtons() {
     button.setAttribute('tabindex', '-1');
     gameButtonsWrapper.append(button);
 
+    const img = document.createElement('img');
+    img.setAttribute('src', './images/hand_drawn.png');
+    button.append(img);
+
     if (el === 0) button.classList.add('empty');
   })
 }
@@ -51,8 +55,8 @@ function setButtonsPlaces() {
   const buttons = document.querySelectorAll('.button');
 
   buttons.forEach((button) => {
-    button.style.left = `${+button.getAttribute('data-x') * 100}px`;
-    button.style.top = `${+button.getAttribute('data-y') * 100}px`;
+    button.style.left = `${+button.getAttribute('data-x') * 75}px`;
+    button.style.top = `${+button.getAttribute('data-y') * 75}px`;
   })
 }
 
@@ -140,14 +144,14 @@ function replaceButtons(emptyBtn, clickedBtn) {
   emptyBtn.setAttribute('data-x', clickedBtn.getAttribute('data-x'));
   emptyBtn.setAttribute('data-y', clickedBtn.getAttribute('data-y'));
 
-  emptyBtn.style.left = `${+emptyBtn.getAttribute('data-x') * 100}px`;
-  emptyBtn.style.top = `${+emptyBtn.getAttribute('data-y') * 100}px`;
+  emptyBtn.style.left = `${+emptyBtn.getAttribute('data-x') * 75}px`;
+  emptyBtn.style.top = `${+emptyBtn.getAttribute('data-y') * 75}px`;
 
   clickedBtn.setAttribute('data-x', `${emptyCoordinates[0]}`);
   clickedBtn.setAttribute('data-y', `${emptyCoordinates[1]}`);
 
-  clickedBtn.style.left = `${+clickedBtn.getAttribute('data-x') * 100}px`;
-  clickedBtn.style.top = `${+clickedBtn.getAttribute('data-y') * 100}px`;
+  clickedBtn.style.left = `${+clickedBtn.getAttribute('data-x') * 75}px`;
+  clickedBtn.style.top = `${+clickedBtn.getAttribute('data-y') * 75}px`;
 
   emptyCoordinates[0] = +emptyBtn.getAttribute('data-x');
   emptyCoordinates[1] = +emptyBtn.getAttribute('data-y');

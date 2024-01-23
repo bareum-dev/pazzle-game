@@ -1,41 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style-type: none;
+  text-decoration: none;
+  font-family: 'Exo', sans-serif;
+}
+
 html {
   font-size: 16px;
 }
 
 body {
+  width: 100dvw;
+  height: 100dvh;
+
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(90deg, #cfecd0, #a0cea7, #9ec0db);
+}
+
+.game {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.game__control {
+  width: 300px;
+
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.game__control li {
+  margin-bottom: 1rem;
+  color: #0c4c74;
+}
+
+.game__control li:first-child {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game__control--button {
+  padding: 1rem 0.5rem;
+
+  color: #0c4c74;
+  font-size: 1.2rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid #0c4c74;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.game__control li:last-child {
+  display: flex;
+  justify-content: space-around;
+}
+
+.game__control li:last-child p,
+.game__control li:last-child p span {
+  font-size: 1.2rem;
 }
 
 .game__buttons-wrapper {
-  border: 1px solid black;
-  width: 400px;
-  height: 400px;
-
-  padding: 0;
   margin: 0;
+  padding: 0;
+  width: 300px;
+  height: 300px;
 
   position: relative;
 }
 
+.game__buttons-wrapper img {
+  position: relative;
+  z-index: -10;
+  top: -22%;
+  left: -22%;
+
+  width: 144%;
+  height: 144%;
+}
+
 .button {
   position: absolute;
-  width: 100px;
-  height: 100px;
+
   margin: 0;
   padding: 0;
+  width: 75px;
+  height: 75px;
+
+  color: #0c4c74;
   font-size: clamp(1rem, 20vw, 2.2rem);
+
+  border: none;
   outline: none;
+  background: transparent;
+
   transition: all 0.2s ease-in-out;
+}
+
+.button img {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
 }
 
 .button.empty {
   visibility: hidden;
 }
 
+.game__size {
+  width: 300px;
+  padding: 0.5rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  font-size: 1.5rem;
+}
+
+.game__size li a {
+  color: #38B97F;
+  transition: all 0.2s ease-in-out;
+}
 
 @media screen and (hover: hover) {
   .button:hover {
     cursor: pointer;
+  }
+
+  .game__size li a:hover {
+    color: #0c4c74;
+  }
+
+  .game__control--button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid transparent;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  body {
+    align-items: flex-start;
+    padding-top: 2rem;
   }
 }
