@@ -1,5 +1,10 @@
 const gameButtonsWrapper = document.querySelector('.game__buttons-wrapper');
 
+const shuffleBtn = document.querySelector('.shuffle-btn');
+const pauseBtn = document.querySelector('.pause-btn');
+const saveBtn = document.querySelector('.save-btn');
+const winsBtn = document.querySelector('.wins-btn');
+
 const size = [4];
 const buttonsOrder = [];
 const emptyCoordinates = [];
@@ -15,6 +20,8 @@ gameButtonsWrapper.addEventListener('click', clickOnButton);
 document.addEventListener('keyup', pressArrow);
 
 document.addEventListener('keydown', keyZ);
+
+shuffleBtn.addEventListener('click', toShuffle);
 
 
 function setButtonsOrder() {
@@ -169,6 +176,26 @@ function replaceButtons(emptyBtn, clickedBtn) {
   emptyBtn.setAttribute('data-order', clickedBtnDataOrder);
   clickedBtn.setAttribute('data-order', emptyDataOrder);
 }
+
+// helper
+function getRandomNumber(min = 1, max = size[0] ** 2) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function toShuffle() {
+  for (let i = 0; i < 500; i += 1) {
+    const randomNum = getRandomNumber();
+    document.querySelector(`[data-value="${randomNum}"]`).click();
+  }
+}
+
+
+
+
+
+
 
 // **********
 // **********
