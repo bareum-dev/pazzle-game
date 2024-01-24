@@ -120,7 +120,7 @@ body {
 
 .game__size {
   width: 300px;
-  padding: 0.5rem;
+  padding: 1rem;
 
   display: flex;
   align-items: center;

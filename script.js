@@ -14,10 +14,12 @@ getEmptyButtonCoordinates();
 gameButtonsWrapper.addEventListener('click', clickOnButton);
 document.addEventListener('keyup', pressArrow);
 
+document.addEventListener('keydown', keyZ);
+
 
 function setButtonsOrder() {
   for (let i = 0; i < size * size; i += 1) {
-    buttonsOrder.push(i);
+    buttonsOrder.push(i + 1);
   }
 }
 
@@ -29,11 +31,14 @@ function outputButtons() {
     button.setAttribute('tabindex', '-1');
     gameButtonsWrapper.append(button);
 
+    button.setAttribute('data-order', el);
+    button.setAttribute('data-value', el);
+
     const img = document.createElement('img');
     img.setAttribute('src', './images/hand_drawn.png');
     button.append(img);
 
-    if (el === 0) button.classList.add('empty');
+    if (el === 16) button.classList.add('empty');
   })
 }
 
@@ -155,4 +160,53 @@ function replaceButtons(emptyBtn, clickedBtn) {
 
   emptyCoordinates[0] = +emptyBtn.getAttribute('data-x');
   emptyCoordinates[1] = +emptyBtn.getAttribute('data-y');
+
+  // change data-order attributess
+
+  const emptyDataOrder = emptyBtn.getAttribute('data-order');
+  const clickedBtnDataOrder = clickedBtn.getAttribute('data-order');
+
+  emptyBtn.setAttribute('data-order', clickedBtnDataOrder);
+  clickedBtn.setAttribute('data-order', emptyDataOrder);
+}
+
+// **********
+// **********
+function keyZ(e) {
+  if (e.code !== 'KeyZ') return;
+
+  const arr = Array.from(document.querySelectorAll('.button'));
+
+  for (let i = 0; i < arr.length; i += 1) {
+    if (+arr[i].getAttribute('data-value') === +arr[i].getAttribute('data-order')) continue;
+
+    const first = arr[i];
+    const second =
+      document.querySelector(`[data-order="${first.getAttribute('data-value')}"]`);
+
+    // *********
+    const firstX = first.getAttribute('data-x');
+    const firstY = first.getAttribute('data-y');
+
+    first.setAttribute('data-x', second.getAttribute('data-x'));
+    first.setAttribute('data-y', second.getAttribute('data-y'));
+
+    first.style.left = `${+first.getAttribute('data-x') * 75}px`;
+    first.style.top = `${+first.getAttribute('data-y') * 75}px`;
+
+    second.setAttribute('data-x', firstX);
+    second.setAttribute('data-y', firstY);
+
+    second.style.left = `${+second.getAttribute('data-x') * 75}px`;
+    second.style.top = `${+second.getAttribute('data-y') * 75}px`;
+
+    // change data-order attributess
+    const firstOrder = first.getAttribute('data-order');
+    const secondOrder = second.getAttribute('data-order');
+
+    first.setAttribute('data-order', secondOrder);
+    second.setAttribute('data-order', firstOrder);
+  }
+
+  getEmptyButtonCoordinates();
 }
