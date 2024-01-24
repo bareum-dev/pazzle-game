@@ -5,9 +5,16 @@ const pauseBtn = document.querySelector('.pause-btn');
 const saveBtn = document.querySelector('.save-btn');
 const winsBtn = document.querySelector('.wins-btn');
 
+const steps = document.querySelector('.steps');
+const time = document.querySelector('.time');
+
 const size = [4];
 const buttonsOrder = [];
 const emptyCoordinates = [];
+
+let seconds = 0;
+let minutes = 0;
+let hours = 0;
 
 setButtonsOrder();
 outputButtons();
@@ -21,15 +28,45 @@ document.addEventListener('keyup', pressArrow);
 
 document.addEventListener('keydown', keyZ);
 
+shuffleBtn.addEventListener('click', function () {
+  time.textContent = 'time: 00:00:00';
+  seconds = 0;
+  minutes = 0;
+  hours = 0;
+});
+
 shuffleBtn.addEventListener('click', toShuffle);
 
+shuffleBtn.addEventListener('click', function startTimer() {
+  setInterval(function () {
+    seconds += 1;
+    if (seconds === 60) {
+      seconds = 0;
+      minutes += 1;
+    }
+    if (minutes === 60) {
+      hours += 1;
+    }
+    time.textContent =
+      `time: ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+  }, 1000);
 
+  this.removeEventListener('click', startTimer);
+});
+
+// **************
+// **************
+// **************
+
+
+// setButtonsOrder
 function setButtonsOrder() {
   for (let i = 0; i < size * size; i += 1) {
     buttonsOrder.push(i + 1);
   }
 }
 
+// outputButtons
 function outputButtons() {
   buttonsOrder.forEach((el) => {
     const button = document.createElement('button');
@@ -48,7 +85,7 @@ function outputButtons() {
     if (el === 16) button.classList.add('empty');
   })
 }
-
+// setCoordinates
 function setCoordinates() {
   let x = 0;
   let y = 0;
@@ -63,6 +100,7 @@ function setCoordinates() {
   }
 }
 
+// setButtonsPlaces
 function setButtonsPlaces() {
   const buttons = document.querySelectorAll('.button');
 
@@ -72,14 +110,14 @@ function setButtonsPlaces() {
   })
 }
 
+// getEmptyButtonCoordinates
 function getEmptyButtonCoordinates() {
   const emptyButton = document.querySelector('.button.empty');
   emptyCoordinates[0] = +emptyButton.getAttribute('data-x');
   emptyCoordinates[1] = +emptyButton.getAttribute('data-y');
 }
 
-// ************************
-// ************************
+// clickOnButton
 function clickOnButton(e) {
   if (!e.target.closest('.button') || e.target.closest('empty')) return;
 
@@ -96,6 +134,7 @@ function clickOnButton(e) {
   replaceButtons(emptyBtn, clickedBtn)
 }
 
+// pressArrow
 function pressArrow(e) {
   if (e.key !== 'ArrowUp' &&
     e.key !== 'ArrowRight' &&
@@ -151,7 +190,7 @@ function pressArrow(e) {
   }
 }
 
-// helper
+// ---------- helper - replaceButtons
 function replaceButtons(emptyBtn, clickedBtn) {
   emptyBtn.setAttribute('data-x', clickedBtn.getAttribute('data-x'));
   emptyBtn.setAttribute('data-y', clickedBtn.getAttribute('data-y'));
@@ -177,28 +216,25 @@ function replaceButtons(emptyBtn, clickedBtn) {
   clickedBtn.setAttribute('data-order', emptyDataOrder);
 }
 
-// helper
+// ---------- helper - getRandomNumber
 function getRandomNumber(min = 1, max = size[0] ** 2) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// toShuffle
 function toShuffle() {
-  for (let i = 0; i < 500; i += 1) {
+  for (let i = 0; i < 1000; i += 1) {
     const randomNum = getRandomNumber();
     document.querySelector(`[data-value="${randomNum}"]`).click();
   }
 }
 
-
-
-
-
-
-
 // **********
 // **********
+
+
 function keyZ(e) {
   if (e.code !== 'KeyZ') return;
 
