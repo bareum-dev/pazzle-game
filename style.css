@@ -7,6 +7,7 @@
   list-style-type: none;
   text-decoration: none;
   font-family: 'Exo', sans-serif;
+  user-select: none;
 }
 
 html {
@@ -77,14 +78,42 @@ body {
   position: relative;
 }
 
-.game__buttons-wrapper img {
-  position: relative;
-  z-index: -10;
-  top: -22%;
-  left: -22%;
+.modal {
+  width: 0;
+  height: 0;
 
-  width: 144%;
-  height: 144%;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  z-index: -10;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.25);
+
+  opacity: 0;
+}
+
+.modal.open {
+  width: 300px;
+  height: 300px;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  to {
+    opacity: 1;
+    width: 300px;
+    height: 300px;
+  }
 }
 
 .button {
@@ -92,8 +121,6 @@ body {
 
   margin: 0;
   padding: 0;
-  width: 75px;
-  height: 75px;
 
   color: #0c4c74;
   font-size: clamp(1rem, 20vw, 2.2rem);

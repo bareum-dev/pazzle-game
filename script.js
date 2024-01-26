@@ -8,8 +8,12 @@ const winsBtn = document.querySelector('.wins-btn');
 const steps = document.querySelector('.steps');
 const time = document.querySelector('.time');
 
+const modal = document.querySelector('.modal');
+
+const gameSizeSection = document.querySelector('.game__size');
+
 const size = [4];
-const buttonsOrder = [];
+let buttonsOrder = [];
 const emptyCoordinates = [];
 
 let seconds = 0;
@@ -20,8 +24,10 @@ setButtonsOrder();
 outputButtons();
 setCoordinates();
 setButtonsPlaces();
-
 getEmptyButtonCoordinates();
+
+// **************
+// **************
 
 gameButtonsWrapper.addEventListener('click', clickOnButton);
 document.addEventListener('keyup', pressArrow);
@@ -37,8 +43,32 @@ shuffleBtn.addEventListener('click', function () {
 
 shuffleBtn.addEventListener('click', toShuffle);
 
-shuffleBtn.addEventListener('click', function startTimer() {
-  setInterval(function () {
+shuffleBtn.addEventListener('click', function () {
+  steps.innerHTML = `steps: <span>0</span>`;
+});
+
+// *******************************************************************************************
+// *******************************************************************************************
+
+
+
+// timer
+// const timerIdOne = setInterval(function () {
+//   seconds += 1;
+//   if (seconds === 60) {
+//     seconds = 0;
+//     minutes += 1;
+//   }
+//   if (minutes === 60) {
+//     hours += 1;
+//   }
+//   time.textContent =
+//     `time: ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+// }, 1000);
+
+
+function timerId() {
+  setTimeout(function runTime() {
     seconds += 1;
     if (seconds === 60) {
       seconds = 0;
@@ -49,18 +79,42 @@ shuffleBtn.addEventListener('click', function startTimer() {
     }
     time.textContent =
       `time: ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-  }, 1000);
 
-  this.removeEventListener('click', startTimer);
+    setTimeout(runTime, 1000);
+  }, 1000)
+};
+
+shuffleBtn.addEventListener('click', function run () {
+  timerId();
+  this.removeEventListener('click', run);
+
+  pauseBtn.addEventListener('click', function toStopTimer() {
+    modal.classList.toggle('open');
+
+    if (modal.classList.contains('open')) {
+      const arr = time.textContent.split(':');
+      let sec = arr[3];
+      let min = arr[2];
+      let hou = arr[1];
+      time.remove();
+      const p = document.createElement('p');
+      p.classList.add('time');
+      document.querySelector('.game__control li:last-child').append(p);
+      p.textContent = `time: ${hou}:${min}:${sec}`;
+    }
+    else {
+
+    }
+})
 });
 
-// **************
-// **************
-// **************
+// *******************************************************************************************
+// *******************************************************************************************
 
 
 // setButtonsOrder
 function setButtonsOrder() {
+  buttonsOrder = []
   for (let i = 0; i < size * size; i += 1) {
     buttonsOrder.push(i + 1);
   }
@@ -82,9 +136,10 @@ function outputButtons() {
     img.setAttribute('src', './images/hand_drawn.png');
     button.append(img);
 
-    if (el === 16) button.classList.add('empty');
+    if (el === size[0] * size[0]) button.classList.add('empty');
   })
 }
+
 // setCoordinates
 function setCoordinates() {
   let x = 0;
@@ -103,10 +158,25 @@ function setCoordinates() {
 // setButtonsPlaces
 function setButtonsPlaces() {
   const buttons = document.querySelectorAll('.button');
-
   buttons.forEach((button) => {
-    button.style.left = `${+button.getAttribute('data-x') * 75}px`;
-    button.style.top = `${+button.getAttribute('data-y') * 75}px`;
+    if (size[0] === 3) {
+      button.style.left = `${+button.getAttribute('data-x') * 100}px`;
+      button.style.top = `${+button.getAttribute('data-y') * 100}px`;
+      button.style.width = '100px';
+      button.style.height = '100px';
+    }
+    if (size[0] === 4) {
+      button.style.left = `${+button.getAttribute('data-x') * 75}px`;
+      button.style.top = `${+button.getAttribute('data-y') * 75}px`;
+      button.style.width = '75px';
+      button.style.height = '75px';
+    }
+    if (size[0] === 5) {
+      button.style.left = `${+button.getAttribute('data-x') * 60}px`;
+      button.style.top = `${+button.getAttribute('data-y') * 60}px`;
+      button.style.width = '60px';
+      button.style.height = '60px';
+    }
   })
 }
 
@@ -131,7 +201,8 @@ function clickOnButton(e) {
   const emptyBtn = document.querySelector('.empty');
   const clickedBtn = e.target;
 
-  replaceButtons(emptyBtn, clickedBtn)
+  replaceButtons(emptyBtn, clickedBtn);
+  stepCounter();
 }
 
 // pressArrow
@@ -188,6 +259,7 @@ function pressArrow(e) {
       replaceButtons(emptyBtn, clickedBtn);
     }
   }
+  stepCounter();
 }
 
 // ---------- helper - replaceButtons
@@ -195,14 +267,20 @@ function replaceButtons(emptyBtn, clickedBtn) {
   emptyBtn.setAttribute('data-x', clickedBtn.getAttribute('data-x'));
   emptyBtn.setAttribute('data-y', clickedBtn.getAttribute('data-y'));
 
-  emptyBtn.style.left = `${+emptyBtn.getAttribute('data-x') * 75}px`;
-  emptyBtn.style.top = `${+emptyBtn.getAttribute('data-y') * 75}px`;
+  let currentSize = null;
+  if (size[0] === 3) currentSize = 100;
+  if (size[0] === 4) currentSize = 75;
+  if (size[0] === 5) currentSize = 60;
+  // -----------------
+
+  emptyBtn.style.left = `${+emptyBtn.getAttribute('data-x') * currentSize}px`;
+  emptyBtn.style.top = `${+emptyBtn.getAttribute('data-y') * currentSize}px`;
 
   clickedBtn.setAttribute('data-x', `${emptyCoordinates[0]}`);
   clickedBtn.setAttribute('data-y', `${emptyCoordinates[1]}`);
 
-  clickedBtn.style.left = `${+clickedBtn.getAttribute('data-x') * 75}px`;
-  clickedBtn.style.top = `${+clickedBtn.getAttribute('data-y') * 75}px`;
+  clickedBtn.style.left = `${+clickedBtn.getAttribute('data-x') * currentSize}px`;
+  clickedBtn.style.top = `${+clickedBtn.getAttribute('data-y') * currentSize}px`;
 
   emptyCoordinates[0] = +emptyBtn.getAttribute('data-x');
   emptyCoordinates[1] = +emptyBtn.getAttribute('data-y');
@@ -223,13 +301,41 @@ function getRandomNumber(min = 1, max = size[0] ** 2) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+// ---------- helper - stepCounter
+function stepCounter() {
+  const stepsNum = steps.querySelector('span').textContent;
+  steps.innerHTML = `steps: <span>${+stepsNum + 1}</span>`;
+}
+
 // toShuffle
 function toShuffle() {
-  for (let i = 0; i < 1000; i += 1) {
+  for (let i = 0; i < 2000; i += 1) {
     const randomNum = getRandomNumber();
     document.querySelector(`[data-value="${randomNum}"]`).click();
   }
+  modal.classList.remove('open');
 }
+
+gameSizeSection.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (e.target.tagName !== 'A') return;
+
+  const refreshSize = +e.target.getAttribute('data-size-value');
+  if (size[0] === refreshSize) return;
+
+  size[0] = refreshSize;
+  gameButtonsWrapper.textContent = '';
+  setButtonsOrder();
+  outputButtons();
+  setCoordinates();
+  setButtonsPlaces();
+  getEmptyButtonCoordinates();
+})
+
+// pauseGame
+// function pauseGame() {
+//   modal.classList.toggle('open');
+// }
 
 // **********
 // **********
@@ -248,20 +354,25 @@ function keyZ(e) {
       document.querySelector(`[data-order="${first.getAttribute('data-value')}"]`);
 
     // *********
+    let currentSize = null;
+    if (size[0] === 3) currentSize = 100;
+    if (size[0] === 4) currentSize = 75;
+    if (size[0] === 5) currentSize = 60;
+
     const firstX = first.getAttribute('data-x');
     const firstY = first.getAttribute('data-y');
 
     first.setAttribute('data-x', second.getAttribute('data-x'));
     first.setAttribute('data-y', second.getAttribute('data-y'));
 
-    first.style.left = `${+first.getAttribute('data-x') * 75}px`;
-    first.style.top = `${+first.getAttribute('data-y') * 75}px`;
+    first.style.left = `${+first.getAttribute('data-x') * currentSize}px`;
+    first.style.top = `${+first.getAttribute('data-y') * currentSize}px`;
 
     second.setAttribute('data-x', firstX);
     second.setAttribute('data-y', firstY);
 
-    second.style.left = `${+second.getAttribute('data-x') * 75}px`;
-    second.style.top = `${+second.getAttribute('data-y') * 75}px`;
+    second.style.left = `${+second.getAttribute('data-x') * currentSize}px`;
+    second.style.top = `${+second.getAttribute('data-y') * currentSize}px`;
 
     // change data-order attributess
     const firstOrder = first.getAttribute('data-order');
