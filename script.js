@@ -319,18 +319,14 @@ function openModal() {
   button.addEventListener('click', function () {
     closeModal();
     resetSteps();
+    canMoveButtons = false;
   });
 }
 
 // closeModal
 function closeModal() {
   modal.classList.remove('open');
-
-  let p = document.querySelector('.modal p');
-  let button = document.querySelector('.modal button');
-
-  if (p) p.remove();
-  if (button) button.remove();
+  modal.textContent = '';
 }
 
 // helpers

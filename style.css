@@ -52,7 +52,7 @@ h1 {
 }
 
 .game__control--button {
-  padding: 1rem 0.5rem;
+  padding: 1rem;
 
   color: #0c4c74;
   font-size: 1.2rem;
@@ -94,13 +94,17 @@ h1 {
   transform: translate(-50%, -50%);
 
   border-radius: 0.5rem;
-  /* background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%); */
-  /* background-image: linear-gradient(to right, #e4afcb 0%, #b8cbb8 0%, #b8cbb8 0%, #e2c58b 30%, #c2ce9c 64%, #7edbdc 100%); */
-  background-image: linear-gradient(to right bottom, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);
 
   opacity: 0;
 
   transition: all 0.3s ease-in-out;
+
+  background: rgba( 255, 255, 255, 0.3 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 30px );
+  -webkit-backdrop-filter: blur( 20px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
 .modal.open {
@@ -194,7 +198,7 @@ h1 {
 
   .modal.open button:hover {
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #BFE2C2;
   }
 }
 
