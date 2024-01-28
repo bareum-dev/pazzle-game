@@ -292,6 +292,8 @@ function openModal() {
 
   modal.appendChild(p);
   modal.appendChild(button);
+
+  button.addEventListener('click', closeModal);
 }
 
 // closeModal
