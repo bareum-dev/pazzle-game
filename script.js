@@ -27,17 +27,18 @@ let hours = 0;
 gameButtonsWrapper.addEventListener('click', clickOnButton);
 document.addEventListener('keyup', pressArrow);
 
+gameSizeSection.addEventListener('click', function (e) {
+  if (+e.target.getAttribute('data-size-value') !== +size) resetSteps();
+});
 gameSizeSection.addEventListener('click', setNewGameSize);
+gameSizeSection.addEventListener('click', closeModal);
 
 shuffleBtn.addEventListener('click', toShuffle);
 shuffleBtn.addEventListener('click', resetSteps);
 shuffleBtn.addEventListener('click', resetTimer);
+shuffleBtn.addEventListener('click', closeModal);
 
 document.addEventListener('keydown', keyZ);
-
-// close modal
-shuffleBtn.addEventListener('click', () => closeModal());
-gameSizeSection.addEventListener('click', () => closeModal());
 
 // *******************************************************************************************
 
@@ -175,6 +176,7 @@ function setButtonsPlaces() {
   })
 }
 
+// setButtonsFontSize
 function setButtonsFontSize() {
   let buttons = document.querySelectorAll('.button');
 
@@ -318,8 +320,8 @@ function closeModal() {
   let p = document.querySelector('.modal p');
   let button = document.querySelector('.modal button');
 
-  p.remove();
-  button.remove();
+  if (p) p.remove();
+  if (button) button.remove();
 }
 
 // helpers
