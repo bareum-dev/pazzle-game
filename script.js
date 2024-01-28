@@ -12,7 +12,7 @@ const modal = document.querySelector('.modal');
 
 const gameSizeSection = document.querySelector('.game__size');
 
-const size = [4];
+let size = 4;
 let buttonsOrder = [];
 const emptyCoordinates = [];
 
@@ -20,37 +20,26 @@ let seconds = 0;
 let minutes = 0;
 let hours = 0;
 
-setButtonsOrder();
-outputButtons();
-setCoordinates();
-setButtonsPlaces();
-getEmptyButtonCoordinates();
 
-// **************
-// **************
+// events
+// *******************************************************************************************
 
 gameButtonsWrapper.addEventListener('click', clickOnButton);
 document.addEventListener('keyup', pressArrow);
 
-document.addEventListener('keydown', keyZ);
-
-shuffleBtn.addEventListener('click', function () {
-  time.textContent = 'time: 00:00:00';
-  seconds = 0;
-  minutes = 0;
-  hours = 0;
-});
+gameSizeSection.addEventListener('click', setNewGameSize);
 
 shuffleBtn.addEventListener('click', toShuffle);
+shuffleBtn.addEventListener('click', resetSteps);
+shuffleBtn.addEventListener('click', resetTimer);
 
-shuffleBtn.addEventListener('click', function () {
-  steps.innerHTML = `steps: <span>0</span>`;
-});
+document.addEventListener('keydown', keyZ);
+
+// close modal
+shuffleBtn.addEventListener('click', () => closeModal());
+gameSizeSection.addEventListener('click', () => closeModal());
 
 // *******************************************************************************************
-// *******************************************************************************************
-
-
 
 // timer
 // const timerIdOne = setInterval(function () {
@@ -87,36 +76,49 @@ function timerId() {
 shuffleBtn.addEventListener('click', function run () {
   timerId();
   this.removeEventListener('click', run);
-
-  pauseBtn.addEventListener('click', function toStopTimer() {
-    modal.classList.toggle('open');
-
-    if (modal.classList.contains('open')) {
-      const arr = time.textContent.split(':');
-      let sec = arr[3];
-      let min = arr[2];
-      let hou = arr[1];
-      time.remove();
-      const p = document.createElement('p');
-      p.classList.add('time');
-      document.querySelector('.game__control li:last-child').append(p);
-      p.textContent = `time: ${hou}:${min}:${sec}`;
-    }
-    else {
-
-    }
-})
 });
 
-// *******************************************************************************************
+
+//functions
 // *******************************************************************************************
 
+startGame();
+
+// startGame
+function startGame() {
+  setButtonsOrder();
+  removeButtons();
+  outputButtons();
+  setCoordinates();
+  setButtonsPlaces();
+  getEmptyButtonCoordinates();
+}
+
+// setNewGameSize
+function setNewGameSize(e) {
+  e.preventDefault();
+  if (e.target.tagName !== 'A') return;
+
+  let refreshSize = +e.target.getAttribute('data-size-value');
+  if (+size === refreshSize) return;
+
+  size = +refreshSize;
+  startGame();
+}
 
 // setButtonsOrder
 function setButtonsOrder() {
-  buttonsOrder = []
+  buttonsOrder = [];
   for (let i = 0; i < size * size; i += 1) {
     buttonsOrder.push(i + 1);
+  }
+}
+
+// removeButtons
+function removeButtons() {
+  let buttons = document.querySelectorAll('.button');
+  if (buttons) {
+    buttons.forEach((el) => el.remove());
   }
 }
 
@@ -127,16 +129,16 @@ function outputButtons() {
     button.classList.add('button');
     button.textContent = el;
     button.setAttribute('tabindex', '-1');
-    gameButtonsWrapper.append(button);
+    gameButtonsWrapper.appendChild(button);
 
     button.setAttribute('data-order', el);
     button.setAttribute('data-value', el);
 
     const img = document.createElement('img');
     img.setAttribute('src', './images/hand_drawn.png');
-    button.append(img);
+    button.appendChild(img);
 
-    if (el === size[0] * size[0]) button.classList.add('empty');
+    if (el === size * size) button.classList.add('empty');
   })
 }
 
@@ -144,45 +146,37 @@ function outputButtons() {
 function setCoordinates() {
   let x = 0;
   let y = 0;
-  const buttons = document.querySelectorAll('.button');
+  let buttons = document.querySelectorAll('.button');
 
   for (let i = 0; i < buttons.length; i += 1) {
     buttons[i].setAttribute('data-x', `${x}`);
     buttons[i].setAttribute('data-y', `${y}`);
     x += 1;
-    if (x === size[0]) y += 1;
-    if (x === size[0]) x = 0;
+    if (x === size) y += 1;
+    if (x === size) x = 0;
   }
 }
 
 // setButtonsPlaces
 function setButtonsPlaces() {
-  const buttons = document.querySelectorAll('.button');
+  let buttons = document.querySelectorAll('.button');
+
+  let currentSize = null;
+  if (+size === 3) currentSize = 100;
+  if (+size === 4) currentSize = 75;
+  if (+size === 5) currentSize = 60;
+
   buttons.forEach((button) => {
-    if (size[0] === 3) {
-      button.style.left = `${+button.getAttribute('data-x') * 100}px`;
-      button.style.top = `${+button.getAttribute('data-y') * 100}px`;
-      button.style.width = '100px';
-      button.style.height = '100px';
-    }
-    if (size[0] === 4) {
-      button.style.left = `${+button.getAttribute('data-x') * 75}px`;
-      button.style.top = `${+button.getAttribute('data-y') * 75}px`;
-      button.style.width = '75px';
-      button.style.height = '75px';
-    }
-    if (size[0] === 5) {
-      button.style.left = `${+button.getAttribute('data-x') * 60}px`;
-      button.style.top = `${+button.getAttribute('data-y') * 60}px`;
-      button.style.width = '60px';
-      button.style.height = '60px';
-    }
+    button.style.left = `${+button.getAttribute('data-x') * currentSize}px`;
+    button.style.top = `${+button.getAttribute('data-y') * currentSize}px`;
+    button.style.width = `${currentSize}px`;
+    button.style.height = `${currentSize}px`;
   })
 }
 
 // getEmptyButtonCoordinates
 function getEmptyButtonCoordinates() {
-  const emptyButton = document.querySelector('.button.empty');
+  let emptyButton = document.querySelector('.button.empty');
   emptyCoordinates[0] = +emptyButton.getAttribute('data-x');
   emptyCoordinates[1] = +emptyButton.getAttribute('data-y');
 }
@@ -203,15 +197,15 @@ function clickOnButton(e) {
 
   replaceButtons(emptyBtn, clickedBtn);
   stepCounter();
+
+  // ОТЛАДКА
+  let winGame = isEndGame();
+  if (winGame) openModal();
+
 }
 
 // pressArrow
 function pressArrow(e) {
-  if (e.key !== 'ArrowUp' &&
-    e.key !== 'ArrowRight' &&
-    e.key !== 'ArrowDown' &&
-    e.key !== 'ArrowLeft') return;
-
   if (e.key === 'ArrowUp') {
     const buttonToMove =
       document.querySelector(
@@ -221,9 +215,13 @@ function pressArrow(e) {
       const emptyBtn = document.querySelector('.empty');
       const clickedBtn = buttonToMove;
       replaceButtons(emptyBtn, clickedBtn);
+      stepCounter();
+
+      // ОТЛАДКА
+      let winGame = isEndGame();
+      if (winGame) openModal();
     }
   }
-
   if (e.key === 'ArrowRight') {
     const buttonToMove =
       document.querySelector(
@@ -233,9 +231,13 @@ function pressArrow(e) {
       const emptyBtn = document.querySelector('.empty');
       const clickedBtn = buttonToMove;
       replaceButtons(emptyBtn, clickedBtn);
+      stepCounter();
+
+      // ОТЛАДКА
+      let winGame = isEndGame();
+      if (winGame) openModal();
     }
   }
-
   if (e.key === 'ArrowDown') {
     const buttonToMove =
       document.querySelector(
@@ -245,9 +247,13 @@ function pressArrow(e) {
       const emptyBtn = document.querySelector('.empty');
       const clickedBtn = buttonToMove;
       replaceButtons(emptyBtn, clickedBtn);
+      stepCounter();
+
+      // ОТЛАДКА
+      let winGame = isEndGame();
+      if (winGame) openModal();
     }
   }
-
   if (e.key === 'ArrowLeft') {
     const buttonToMove =
       document.querySelector(
@@ -257,21 +263,45 @@ function pressArrow(e) {
       const emptyBtn = document.querySelector('.empty');
       const clickedBtn = buttonToMove;
       replaceButtons(emptyBtn, clickedBtn);
+      stepCounter();
+
+      // ОТЛАДКА
+      let winGame = isEndGame();
+      if (winGame) openModal();
     }
   }
-  stepCounter();
 }
 
-// ---------- helper - replaceButtons
+// isEndGame
+function isEndGame() {
+  const buttons = Array.from(document.querySelectorAll('.button'));
+  return buttons.every((el) => {
+    return +el.getAttribute('data-order') === +el.getAttribute('data-value')
+  });
+}
+
+// openModal
+function openModal() {
+  modal.classList.add('open');
+}
+
+// closeModal
+function closeModal() {
+  modal.classList.remove('open');
+}
+
+// helpers
+// *******************************************************************************************
+
+// replaceButtons
 function replaceButtons(emptyBtn, clickedBtn) {
   emptyBtn.setAttribute('data-x', clickedBtn.getAttribute('data-x'));
   emptyBtn.setAttribute('data-y', clickedBtn.getAttribute('data-y'));
 
   let currentSize = null;
-  if (size[0] === 3) currentSize = 100;
-  if (size[0] === 4) currentSize = 75;
-  if (size[0] === 5) currentSize = 60;
-  // -----------------
+  if (+size === 3) currentSize = 100;
+  if (+size === 4) currentSize = 75;
+  if (+size === 5) currentSize = 60;
 
   emptyBtn.style.left = `${+emptyBtn.getAttribute('data-x') * currentSize}px`;
   emptyBtn.style.top = `${+emptyBtn.getAttribute('data-y') * currentSize}px`;
@@ -285,26 +315,24 @@ function replaceButtons(emptyBtn, clickedBtn) {
   emptyCoordinates[0] = +emptyBtn.getAttribute('data-x');
   emptyCoordinates[1] = +emptyBtn.getAttribute('data-y');
 
-  // change data-order attributess
-
+  // change data-order attributes
   const emptyDataOrder = emptyBtn.getAttribute('data-order');
   const clickedBtnDataOrder = clickedBtn.getAttribute('data-order');
-
   emptyBtn.setAttribute('data-order', clickedBtnDataOrder);
   clickedBtn.setAttribute('data-order', emptyDataOrder);
 }
 
-// ---------- helper - getRandomNumber
-function getRandomNumber(min = 1, max = size[0] ** 2) {
+// getRandomNumber
+function getRandomNumber(min = 1, max = size ** 2) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// ---------- helper - stepCounter
+// stepCounter
 function stepCounter() {
-  const stepsNum = steps.querySelector('span').textContent;
-  steps.innerHTML = `steps: <span>${+stepsNum + 1}</span>`;
+  let stepsCount = steps.querySelector('span').textContent;
+  steps.innerHTML = `steps: <span>${+stepsCount + 1}</span>`;
 }
 
 // toShuffle
@@ -313,34 +341,22 @@ function toShuffle() {
     const randomNum = getRandomNumber();
     document.querySelector(`[data-value="${randomNum}"]`).click();
   }
-  modal.classList.remove('open');
 }
 
-gameSizeSection.addEventListener('click', function (e) {
-  e.preventDefault();
-  if (e.target.tagName !== 'A') return;
+// resetSteps
+function resetSteps() {
+  steps.innerHTML = `steps: <span>0</span>`;
+}
 
-  const refreshSize = +e.target.getAttribute('data-size-value');
-  if (size[0] === refreshSize) return;
+// resetTimer
+function resetTimer() {
+  time.textContent = 'time: 00:00:00';
+  seconds = 0;
+  minutes = 0;
+  hours = 0;
+}
 
-  size[0] = refreshSize;
-  gameButtonsWrapper.textContent = '';
-  setButtonsOrder();
-  outputButtons();
-  setCoordinates();
-  setButtonsPlaces();
-  getEmptyButtonCoordinates();
-})
-
-// pauseGame
-// function pauseGame() {
-//   modal.classList.toggle('open');
-// }
-
-// **********
-// **********
-
-
+// keyZ - START
 function keyZ(e) {
   if (e.code !== 'KeyZ') return;
 
@@ -355,9 +371,9 @@ function keyZ(e) {
 
     // *********
     let currentSize = null;
-    if (size[0] === 3) currentSize = 100;
-    if (size[0] === 4) currentSize = 75;
-    if (size[0] === 5) currentSize = 60;
+    if (+size === 3) currentSize = 100;
+    if (+size === 4) currentSize = 75;
+    if (+size === 5) currentSize = 60;
 
     const firstX = first.getAttribute('data-x');
     const firstY = first.getAttribute('data-y');
@@ -377,10 +393,13 @@ function keyZ(e) {
     // change data-order attributess
     const firstOrder = first.getAttribute('data-order');
     const secondOrder = second.getAttribute('data-order');
-
     first.setAttribute('data-order', secondOrder);
     second.setAttribute('data-order', firstOrder);
   }
 
   getEmptyButtonCoordinates();
+
+  // ОТЛАДКА
+  let winGame = isEndGame();
+  if (winGame) openModal();
 }
