@@ -140,7 +140,6 @@ h1 {
   padding: 0;
 
   color: #0c4c74;
-  font-size: clamp(1rem, 20vw, 2.2rem);
 
   border: none;
   outline: none;

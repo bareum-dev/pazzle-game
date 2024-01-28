@@ -91,6 +91,7 @@ function startGame() {
   outputButtons();
   setCoordinates();
   setButtonsPlaces();
+  setButtonsFontSize()
   getEmptyButtonCoordinates();
 }
 
@@ -172,6 +173,17 @@ function setButtonsPlaces() {
     button.style.width = `${currentSize}px`;
     button.style.height = `${currentSize}px`;
   })
+}
+
+function setButtonsFontSize() {
+  let buttons = document.querySelectorAll('.button');
+
+  let fontSize = null;
+  if (+size === 3) fontSize = 2.2;
+  if (+size === 4) fontSize = 1.8;
+  if (+size === 5) fontSize = 1.5;
+
+  buttons.forEach((button) => button.style.fontSize = `${fontSize}rem`);
 }
 
 // getEmptyButtonCoordinates
@@ -293,7 +305,10 @@ function openModal() {
   modal.appendChild(p);
   modal.appendChild(button);
 
-  button.addEventListener('click', closeModal);
+  button.addEventListener('click', function () {
+    closeModal();
+    resetSteps();
+  });
 }
 
 // closeModal
