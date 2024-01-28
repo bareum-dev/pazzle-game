@@ -283,11 +283,26 @@ function isEndGame() {
 // openModal
 function openModal() {
   modal.classList.add('open');
+
+  let p = document.createElement('p');
+  p.innerHTML = `Congrats! <br> You've won!`;
+
+  let button = document.createElement('button');
+  button.textContent = `I'm good`;
+
+  modal.appendChild(p);
+  modal.appendChild(button);
 }
 
 // closeModal
 function closeModal() {
   modal.classList.remove('open');
+
+  let p = document.querySelector('.modal p');
+  let button = document.querySelector('.modal button');
+
+  p.remove();
+  button.remove();
 }
 
 // helpers

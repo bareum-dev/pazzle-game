@@ -25,6 +25,10 @@ body {
   background: linear-gradient(90deg, #cfecd0, #a0cea7, #9ec0db);
 }
 
+h1 {
+  display: none;
+}
+
 .game {
   display: flex;
   flex-flow: column nowrap;
@@ -116,6 +120,7 @@ body {
 .modal.open p {
   font-size: 2rem;
   color: #0c4c74;
+  text-align: center;
 }
 
 .modal.open button {
@@ -197,6 +202,6 @@ body {
 @media screen and (max-width: 576px) {
   body {
     align-items: flex-start;
-    padding-top: 2rem;
+    padding-top: 3rem;
   }
 }
