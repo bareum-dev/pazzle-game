@@ -20,6 +20,7 @@ let seconds = 0;
 let minutes = 0;
 let hours = 0;
 
+let canMoveButtons = false;
 
 // events
 // *******************************************************************************************
@@ -87,6 +88,7 @@ startGame();
 
 // startGame
 function startGame() {
+  canMoveButtons = false;
   setButtonsOrder();
   removeButtons();
   outputButtons();
@@ -197,6 +199,8 @@ function getEmptyButtonCoordinates() {
 
 // clickOnButton
 function clickOnButton(e) {
+  if (!canMoveButtons) return;
+
   if (!e.target.closest('.button') || e.target.closest('empty')) return;
 
   const coordsDiff =
@@ -220,6 +224,8 @@ function clickOnButton(e) {
 
 // pressArrow
 function pressArrow(e) {
+  if (!canMoveButtons) return;
+
   if (e.key === 'ArrowUp') {
     const buttonToMove =
       document.querySelector(
@@ -236,6 +242,7 @@ function pressArrow(e) {
       if (winGame) openModal();
     }
   }
+
   if (e.key === 'ArrowRight') {
     const buttonToMove =
       document.querySelector(
@@ -252,6 +259,7 @@ function pressArrow(e) {
       if (winGame) openModal();
     }
   }
+
   if (e.key === 'ArrowDown') {
     const buttonToMove =
       document.querySelector(
@@ -268,6 +276,7 @@ function pressArrow(e) {
       if (winGame) openModal();
     }
   }
+
   if (e.key === 'ArrowLeft') {
     const buttonToMove =
       document.querySelector(
@@ -329,6 +338,7 @@ function closeModal() {
 
 // replaceButtons
 function replaceButtons(emptyBtn, clickedBtn) {
+
   emptyBtn.setAttribute('data-x', clickedBtn.getAttribute('data-x'));
   emptyBtn.setAttribute('data-y', clickedBtn.getAttribute('data-y'));
 
@@ -371,6 +381,8 @@ function stepCounter() {
 
 // toShuffle
 function toShuffle() {
+  canMoveButtons = true;
+
   for (let i = 0; i < 2000; i += 1) {
     const randomNum = getRandomNumber();
     document.querySelector(`[data-value="${randomNum}"]`).click();
