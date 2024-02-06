@@ -9,27 +9,27 @@
 <body>
   <section class="game">
     <h1>Tag game</h1>
+
     <ul class="game__control">
       <li>
-        <buttons class="game__control--button shuffle-btn">shuffle</buttons>
-        <buttons class="game__control--button pause-btn">pause</buttons>
-        <!-- <buttons class="game__control--button save-btn">save</buttons> -->
-        <buttons class="game__control--button wins-btn">wins</buttons>
+        <buttons class="game__control--shuffle-btn">shuffle</buttons>
+        <ul class="game__size">
+          <li><button class="size-btn" data-size-value="3">3x3</button></li>
+          <li><button class="size-btn" data-size-value="4">4x4</button></li>
+          <li><button class="size-btn" data-size-value="5">5x5</button></li>
+        </ul>
       </li>
       <li>
         <p class="steps">steps: <span>0</span></p>
-        <p class="time">time: 00:00:00</p>
       </li>
+
     </ul>
+
     <div class="game__buttons-wrapper">
       <div class="modal">
       </div>
     </div>
-    <ul class="game__size">
-      <li><a class="size-btn" href="" data-size-value="3">3x3</a></li>
-      <li><a class="size-btn" href="" data-size-value="4">4x4</a></li>
-      <li><a class="size-btn" href="" data-size-value="5">5x5</a></li>
-    </ul>
+
   </section>
   <script src="./script.js"></script>
 </body>

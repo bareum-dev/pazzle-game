@@ -36,23 +36,31 @@ h1 {
 
 .game__control {
   width: 300px;
+  margin-bottom: 1rem;
 
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: column;
+  gap: 1rem;
 }
 
 .game__control li {
-  margin-bottom: 1rem;
   color: #0c4c74;
+  font-size: 1.2rem;
 }
 
 .game__control li:first-child {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
 }
 
-.game__control--button {
-  padding: 1rem;
+.game__control li:last-child {
+  text-align: center;
+}
+
+.game__control--shuffle-btn {
+  padding: 1rem 0.5rem;
 
   color: #0c4c74;
   font-size: 1.2rem;
@@ -63,14 +71,27 @@ h1 {
   transition: all 0.2s ease-in-out;
 }
 
-.game__control li:last-child {
+.game__size {
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  font-size: 1.5rem;
 }
 
-.game__control li:last-child p,
-.game__control li:last-child p span {
+.size-btn {
+  padding: 1rem 0.5rem;
+
+  color: #0c4c74;
   font-size: 1.2rem;
+
+  border-radius: 0.5rem;
+  border: 1px solid #0c4c74;
+  background-color: transparent;
+
+  transition: all 0.2s ease-in-out;
 }
 
 .game__buttons-wrapper {
@@ -165,32 +186,13 @@ h1 {
   visibility: hidden;
 }
 
-.game__size {
-  width: 300px;
-  padding: 1rem;
-
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  font-size: 1.5rem;
-}
-
-.game__size li a {
-  color: #38B97F;
-  transition: all 0.2s ease-in-out;
-}
-
 @media screen and (hover: hover) {
   .button:hover {
     cursor: pointer;
   }
 
-  .game__size li a:hover {
-    color: #0c4c74;
-  }
-
-  .game__control--button:hover {
+  .size-btn:hover,
+  .game__control--shuffle-btn:hover {
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.2);
     border: 1px solid transparent;

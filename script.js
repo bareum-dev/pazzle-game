@@ -1,6 +1,6 @@
 const gameButtonsWrapper = document.querySelector('.game__buttons-wrapper');
 
-const shuffleBtn = document.querySelector('.shuffle-btn');
+const shuffleBtn = document.querySelector('.game__control--shuffle-btn');
 const pauseBtn = document.querySelector('.pause-btn');
 const saveBtn = document.querySelector('.save-btn');
 const winsBtn = document.querySelector('.wins-btn');
@@ -36,15 +36,14 @@ gameSizeSection.addEventListener('click', closeModal);
 
 shuffleBtn.addEventListener('click', toShuffle);
 shuffleBtn.addEventListener('click', resetSteps);
-shuffleBtn.addEventListener('click', resetTimer);
 shuffleBtn.addEventListener('click', closeModal);
 
 document.addEventListener('keydown', keyZ);
 
 // *******************************************************************************************
+// let timerId = setInterval(() => {
+//   if (modal.classList.contains('open')) clearInterval(timerId);
 
-// timer
-// const timerIdOne = setInterval(function () {
 //   seconds += 1;
 //   if (seconds === 60) {
 //     seconds = 0;
@@ -53,32 +52,11 @@ document.addEventListener('keydown', keyZ);
 //   if (minutes === 60) {
 //     hours += 1;
 //   }
+
 //   time.textContent =
 //     `time: ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
 // }, 1000);
-
-
-function timerId() {
-  setTimeout(function runTime() {
-    seconds += 1;
-    if (seconds === 60) {
-      seconds = 0;
-      minutes += 1;
-    }
-    if (minutes === 60) {
-      hours += 1;
-    }
-    time.textContent =
-      `time: ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-
-    setTimeout(runTime, 1000);
-  }, 1000)
-};
-
-shuffleBtn.addEventListener('click', function run () {
-  timerId();
-  this.removeEventListener('click', run);
-});
 
 
 //functions
@@ -101,7 +79,7 @@ function startGame() {
 // setNewGameSize
 function setNewGameSize(e) {
   e.preventDefault();
-  if (e.target.tagName !== 'A') return;
+  if (e.target.tagName !== 'BUTTON') return;
 
   let refreshSize = +e.target.getAttribute('data-size-value');
   if (+size === refreshSize) return;
@@ -388,14 +366,6 @@ function toShuffle() {
 // resetSteps
 function resetSteps() {
   steps.innerHTML = `steps: <span>0</span>`;
-}
-
-// resetTimer
-function resetTimer() {
-  time.textContent = 'time: 00:00:00';
-  seconds = 0;
-  minutes = 0;
-  hours = 0;
 }
 
 // keyZ - START
